@@ -7,7 +7,7 @@ const cowSchema = new Schema<IBook, BookModel>(
     author: { type: String, required: true },
     genre: { type: String, required: true },
     publicationDate: { type: String, required: true },
-    reviews: { type: [] },
+    reviews: { type: [String], default: [] },
     image: { type: String, required: true },
     userId: { type: Schema.Types.ObjectId, required: true },
   },

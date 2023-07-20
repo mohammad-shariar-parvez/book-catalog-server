@@ -110,12 +110,18 @@ const updateBook = async (
     const rev = payload.reviews;
     const res = await Book.updateOne({ _id: id }, { $push: { reviews: rev } });
     return res;
+    // const result = await Book.findByIdAndUpdate(
+    //   { _id: id },
+    //   { $push: { reviews: payload.reviews } },
+    //   { new: true }
+    // );
+    // return result;
+  } else {
+    const result = await Book.findByIdAndUpdate(id, payload, {
+      new: true, // return new document of the DB
+    });
+    return result;
   }
-
-  const result = await Book.findByIdAndUpdate(id, payload, {
-    new: true, // return new document of the DB
-  });
-  return result;
 };
 
 const deleteBook = async (id: string): Promise<IBook | null> => {
