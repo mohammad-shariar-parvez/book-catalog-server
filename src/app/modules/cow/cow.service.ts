@@ -23,7 +23,6 @@ const getAllBook = async (
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<IBook[]>> => {
   const { searchTerm, publicationDate, ...filtersData } = filters;
-  console.log('FILTERS DATA', publicationDate);
 
   const andConditions = [];
 
@@ -102,26 +101,40 @@ const updateBook = async (
 ): Promise<IBook | null> => {
   const isExist = await Book.findById(id);
 
-  console.log('EXIST ', isExist);
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Book not found!');
   }
   if (payload.reviews) {
-    const rev = payload.reviews;
-    const res = await Book.updateOne({ _id: id }, { $push: { reviews: rev } });
-    return res;
-    // const result = await Book.findByIdAndUpdate(
-    //   { _id: id },
-    //   { $push: { reviews: payload.reviews } },
-    //   { new: true }
-    // );
-    // return result;
+    const result = await Book.findByIdAndUpdate(
+      id,
+      { $push: { reviews: payload.reviews } },
+      { new: true }
+    );
+    return result;
   } else {
     const result = await Book.findByIdAndUpdate(id, payload, {
       new: true, // return new document of the DB
     });
     return result;
   }
+
+  //ANOTHER SOLUTION
+  // const { reviews, ...payload } = req.body;
+  //  let updateObject: any = {};
+
+  //  // Check if 'reviews' field is present in the payload
+  //  if (reviews) {
+  //    updateObject.$push = { reviews }; // Use the reviews directly to update the reviews field
+  //  }
+
+  //  // Include other fields in the updateObject
+  //  if (Object.keys(payload).length > 0) {
+  //    updateObject = { ...updateObject, ...payload };
+  //  }
+
+  //  const updatedBook = await Book.findByIdAndUpdate(id, updateObject, {
+  //    new: true,
+  //  });
 };
 
 const deleteBook = async (id: string): Promise<IBook | null> => {

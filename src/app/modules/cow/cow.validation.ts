@@ -30,7 +30,7 @@ const updateCowZodSchema = z.object({
     author: z.string().optional(),
     genre: z.string().optional(),
     publicationDate: z.string().optional(),
-    reviews: z.array(z.string()).optional(),
+    reviews: z.string().optional(),
     image: z.string().optional(),
     userId: z.string().optional(),
   }),
